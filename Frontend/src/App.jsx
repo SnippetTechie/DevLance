@@ -1,15 +1,17 @@
-import { useState } from 'react'
-import './App.css'
+import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Wallet from "./pages/Wallet";
+import Home from './pages/Home';
 
 function App() {
   return (
-    <>
-      <div>
-        <h1>DevLance</h1>
-        <p>A decentralized freelance platform that securely connects external clients with our club’s developers</p>
-      </div>
-    </>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} /> 
+        <Route path="/wallet" element={<Wallet />} /> 
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
