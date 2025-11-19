@@ -1,0 +1,122 @@
+[
+  {
+    "id": "1",
+    "title": "Fix UI layout issue on dashboard",
+    "description": "The dashboard layout breaks on smaller screens. Fix the responsive alignment using CSS Grid or Flexbox.",
+    "price": "0.03 ETH",
+    "deadline": "2025-11-20",
+    "status": "open",
+    "client": "0xA9148F32c90e45a4F84d21C5F3B872BCa1Fd7E10",
+    "developer": null,
+    "metadataCID": "ipfs://bafkreicbvd6yrwyanpkj3y4w6obuh27e4s66ttwejnbjv7e53jmtjx6uei",
+    "submissionCID": null
+  },
+  {
+    "id": "2",
+    "title": "Add JWT authentication to backend",
+    "description": "Implement JWT-based login and protect the private routes with middleware.",
+    "price": "0.05 ETH",
+    "deadline": "2025-11-22",
+    "status": "accepted",
+    "client": "0xF9b3d041c6DD4672314ba71e0A9a1A447d5C4D0F",
+    "developer": "0x4b1F32eF346F1C1EE6a6EE2e9719347ac50C9f70",
+    "metadataCID": "ipfs://bafkreid7o2kbubc2yc7usyfmmf6o5xcvti3hy4fnuy6p633ywy2fq7i5ji",
+    "submissionCID": null
+  },
+  {
+    "id": "3",
+    "title": "Create landing page for marketing",
+    "description": "Design and implement a minimal landing page with hero, features, and footer sections.",
+    "price": "0.04 ETH",
+    "deadline": "2025-11-25",
+    "status": "submitted",
+    "client": "0x9eaf9245C38bD3f0d5c7D4822B4f85a7021b5f00",
+    "developer": "0x2A8b7e7586A9C169b89Eb4fc2B5Ef851261Cb954",
+    "metadataCID": "ipfs://bafkreihfg76rrudpu4cawvq3g7s7z3wsnrrrn3n2eje6pyw5p7blfupczy",
+    "submissionCID": "ipfs://bafkreigpj6wdz66x4rfyn2dj3efl2yb53qz4ss6l3d775735ltr3lcbjai"
+  },
+  {
+    "id": "4",
+    "title": "Write API documentation for user service",
+    "description": "Document all the user service endpoints including request/response schemas.",
+    "price": "0.02 ETH",
+    "deadline": "2025-11-19",
+    "status": "open",
+    "client": "0xB14aE56E2517B638c3ab672CA513d9Ec4A94498B",
+    "developer": null,
+    "metadataCID": "ipfs://bafkreifk2p3pq2pfk3gnb7ktyhtkyfcw46jabgwdpvu7hzv5oghk7f2fuy",
+    "submissionCID": null
+  },
+  {
+    "id": "5",
+    "title": "Add dark mode to React website",
+    "description": "Implement theme toggling with persistent localStorage support and automatic OS theme detection.",
+    "price": "0.015 ETH",
+    "deadline": "2025-11-21",
+    "status": "accepted",
+    "client": "0x0F51b22970fFa69cC350C1C2272a3dC26eC62A8A",
+    "developer": "0x8d7F75d7Cc97e4BEAd626f9dDB704f6481f42D75",
+    "metadataCID": "ipfs://bafkreie2hgjtgpbnjq2ex5gl4a2rcj4zkdx3yad7w7k6xoljggkfxc2tky",
+    "submissionCID": null
+  },
+  {
+    "id": "6",
+    "title": "Optimize backend SQL queries",
+    "description": "Several queries in the analytics service are slow. Rewrite them using indexes and group-by optimization.",
+    "price": "0.07 ETH",
+    "deadline": "2025-11-24",
+    "status": "open",
+    "client": "0xC0d89b3a5DB5AD67d3C80E1b7E4b6A601C1A33c9",
+    "developer": null,
+    "metadataCID": "ipfs://bafkreibnmq7yxt7oh5cgbr6gnkj2ks2t3lw3eok6v7bz2jcugf4eqtzhsi",
+    "submissionCID": null
+  },
+  {
+    "id": "7",
+    "title": "Build email notification system",
+    "description": "Add email notifications using nodemailer for sign up, password reset, and order updates.",
+    "price": "0.06 ETH",
+    "deadline": "2025-11-28",
+    "status": "submitted",
+    "client": "0x3bd94c2A05d341C66f8F344AaEF4490F1BF03967",
+    "developer": "0xF2Aea553f41C4A3e571e8EEBC8b8C1cC3A1371E7",
+    "metadataCID": "ipfs://bafkreifmjzryudxmy6x6zj3v6ezw5uyfmxom3dz3usqbb4lk2rq0qhgyjm",
+    "submissionCID": "ipfs://bafkreiaguvmii5dp5hljzti7ekmqlg6l4omho5rsgc2pvyhfv6ojqjizwm"
+  },
+  {
+    "id": "8",
+    "title": "Implement WebSocket chat",
+    "description": "Build a simple chat system using WebSockets that supports real-time messaging.",
+    "price": "0.09 ETH",
+    "deadline": "2025-11-27",
+    "status": "open",
+    "client": "0x7Fbe62aC95De66e8cA8C77B77F2D9d6c1273E28B",
+    "developer": null,
+    "metadataCID": "ipfs://bafkreifqcj3dypwln6j6p7xn4kueylyrnq6p3mr7aoh5ppddqyqmv6mqze",
+    "submissionCID": null
+  },
+  {
+    "id": "9",
+    "title": "Refactor React state logic",
+    "description": "Replace heavy prop drilling using React Context or Zustand for cleaner global state management.",
+    "price": "0.025 ETH",
+    "deadline": "2025-11-23",
+    "status": "accepted",
+    "client": "0x1A54c58A4C0eC15d0Bc344b36F76A5e255f52871",
+    "developer": "0xDEa43F9aFE354d7d791134f480679901Bf57A226",
+    "metadataCID": "ipfs://bafkreidr3gdfovcqnbpriuqy7pbq4qlrjvsgua3acrl5oetbpqq6w7thye",
+    "submissionCID": null
+  },
+  {
+    "id": "10",
+    "title": "Deploy frontend on Vercel",
+    "description": "Set up CI/CD pipeline for automated deployments to Vercel on each GitHub push.",
+    "price": "0.01 ETH",
+    "deadline": "2025-11-18",
+    "status": "completed",
+    "client": "0xE08a9c1E0AeBd82c579E9E628A2d67bE23DBe4F2",
+    "developer": "0x6f3D1792aE7e0a9C8C67254F315f4161Bd834b59",
+    "metadataCID": "ipfs://bafkreicrunn7kbmxq3hw75sb4fqz2u4gqohovwh2h6o3zh4kazoq5evgwy",
+    "submissionCID": "ipfs://bafkreiht6geumztuulkpjf32oykxfgguyvuzedjoynqeh3u6wprvrqjz6e"
+  }
+]
