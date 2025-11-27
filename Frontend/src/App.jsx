@@ -1,19 +1,44 @@
-import './App.css';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Wallet from "./pages/Wallet";
-import Home from './pages/Home';
-import TaskDetail from "./pages/TaskDetail";
+// src/App.jsx
+import React, { Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
+import './index.css';
 
-function App() {
+// Lazy load pages (only Landing exists for now)
+const Landing = React.lazy(() => import('./pages/Landing'));
+const CreateGig = React.lazy(() => import('./pages/CreateGig'));       // placeholder
+const Marketplace = React.lazy(() => import('./pages/Marketplace'));   // placeholder
+const NotFound = React.lazy(() => import('./pages/NotFound'));         // placeholder
+
+function PageFallback() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} /> 
-        <Route path="/wallet" element={<Wallet />} />
-        <Route path="/task/:id" element={<TaskDetail />} /> 
-      </Routes>
-    </Router>
+    <div className="min-h-screen flex items-center justify-center text-gray-600">
+      Loading…
+    </div>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <div className="min-h-screen flex flex-col bg-white">
+      {/* Header shown on all pages */}
+      <Header />
+
+      <main className="flex-1">
+        <Suspense fallback={<PageFallback />}>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/create-gig" element={<CreateGig />} />
+            <Route path="/marketplace" element={<Marketplace />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </main>
+
+      {/* Optional footer */}
+      <footer className="py-4 text-center text-sm text-gray-500">
+        © {new Date().getFullYear()} DevLance
+      </footer>
+    </div>
+  );
+}
