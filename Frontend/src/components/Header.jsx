@@ -1,17 +1,15 @@
-// src/components/Header.jsx
-import React from 'react';
+import React from 'react'
 
-export default function Header() {
+const Header = () => {
   return (
-    <header className="flex items-center justify-between px-6 py-4">
-      <div className="flex items-center gap-3">
-      </div>
-
-      {/* keep empty right side for clean landing look; wallet actions happen on role pages */}
-      <div />
-    </header>
-  );
+    <div>
+      
+    </div>
+  )
 }
+
+export default Header
+
 
 
 // import React from "react";
