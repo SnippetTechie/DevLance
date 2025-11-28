@@ -1,7 +1,53 @@
-# 🚀 DevLance  
-A Decentralized Freelancing Platform for Developers
+# DevLance - Decentralized Freelance Platform
 
-DevLance is a Web3-powered freelance marketplace designed to connect clients with verified developers through transparent, trustless, and secure smart-contract-based escrow.  
-This platform enables clients to post tasks, developers to accept work, and payments to be automatically released only upon successful completion — ensuring fairness with no middlemen, no delays, and no platform fees.  
+A Web3-powered freelance marketplace connecting clients with developers through blockchain technology.
 
-DevLance creates a decentralized environment where developers can gain experience, and earn securely.
+## Features
+- 🔐 Wallet-based authentication
+- 💰 Smart contract escrow payments
+- 📝 IPFS work tracking
+- 🚀 Zero middlemen, minimal fees
+- ✅ Trustless transactions
+
+## Getting Started
+
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+
+### Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/SnippetTechie/DevLance.git
+cd DevLance
+git checkout ui/ux
+```
+
+2. Install dependencies
+```bash
+npm install
+```
+
+3. Run development server
+```bash
+npm run dev
+```
+
+4. Open browser to `http://localhost:5173`
+
+### Build for Production
+```bash
+npm run build
+```
+
+## Tech Stack
+- React 18
+- Vite
+- Tailwind CSS
+- Lucide Icons
+- Ethereum (Web3)
+- IPFS
+
+## License
+MIT
