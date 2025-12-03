@@ -1,29 +1,23 @@
-export function isEthereumAvailable(){
-    return typeof window !== 'undefined' && Boolean(window.ethereum);
+// src/utils/wallet.js
+export function isEthereumAvailable() {
+  return typeof window !== 'undefined' && !!window.ethereum;
 }
 
-export async function requestAccounts(){
-    if(!isEthereumAvailable()) throw new Error("No injected wallet found (MetaMask).");
-    const accounts=await window.ethereum.request({method:'eth_requestAccounts'});
-    return accounts;
+/**
+ * Request accounts (MetaMask popup).
+ * Returns array of addresses or throws error if user rejects.
+ */
+export async function requestAccounts() {
+  if (!isEthereumAvailable()) throw new Error('No injected wallet found');
+  // This must be called from a user-initiated click handler for a popup to appear reliably.
+  const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+  return accounts; // array of addresses (strings)
 }
 
-export async function getAccounts(){
-    if(!isEthereumAvailable()) return [];
-    const accounts=await window.ethereum.request({method:'eth_accounts'});
-    return accounts;
-}
-
-export async function getChainId(){
-    if(!isEthereumAvailable()) return null;
-    return await window.ethereum.request({method:'eth_chainId'});
-}
-
-export async function switchNetwork(chainIdHex){
-    if(!isEthereumAvailable()) throw new Error('No injected wallet found');
-    await window.ethereum.request({
-        method:'wallet_switchEthereumChain',
-        params:[{chainId:chainIdHex}],
-    });
-    return true;
+/**
+ * Optional: check current chain id
+ */
+export async function getChainId() {
+  if (!isEthereumAvailable()) return null;
+  return await window.ethereum.request({ method: 'eth_chainId' });
 }
