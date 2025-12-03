@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { pinMetadataJSON } from '../utils/ipfs';
 import { createGigOnchain } from '../utils/contract';
 import { isEthereumAvailable, requestAccounts } from '../utils/wallet';
+import { ethers } from 'ethers';
 
-const SECURITY_HOLD_PERCENT = 0.05;
+const SECURITY_HOLD_BPS = 500; // 5% in basis points
+const BASIS_POINTS = 10000;
 const MIN_AMOUNT_ETH = 0.001;
 const MAX_AMOUNT_ETH = 1000;
 const MIN_DEADLINE_DAYS = 1;
@@ -47,11 +49,15 @@ export default function CreateGig() {
     setSampleFiles(Array.from(e.target.files || []));
   }
 
+  // compute security hold in wei as bigint
   function computeSecurityHoldWei(amountEthStr) {
-    const { ethers } = require('ethers');
-    const amountWei = ethers.utils.parseEther(String(amountEthStr));
-    const hold = amountWei.mul(Math.floor(SECURITY_HOLD_PERCENT * 100)).div(100);
-    return hold;
+    try {
+      const amountWei = ethers.parseEther(String(amountEthStr || '0')); // bigint
+      const holdWei = (amountWei * BigInt(SECURITY_HOLD_BPS)) / BigInt(BASIS_POINTS);
+      return holdWei;
+    } catch (err) {
+      return 0n;
+    }
   }
 
   async function handleCreateClick() {
@@ -72,6 +78,7 @@ export default function CreateGig() {
 
     setLoading(true);
     try {
+      // Build metadata (inviteAddress stored only in metadata since contract doesn't accept it)
       const metadata = {
         title,
         shortDesc,
@@ -82,44 +89,49 @@ export default function CreateGig() {
         createdAt: new Date().toISOString(),
       };
 
+      // Pin metadata to IPFS (your existing util)
       const pinRes = await pinMetadataJSON(metadata);
       if (!pinRes || !pinRes.hash) throw new Error('Pinning failed — aborting create');
       setPinnedCID(pinRes.hash);
 
-      const { ethers } = require('ethers');
-      const amountWeiBN = ethers.utils.parseEther(String(amountEth));
-      const holdWeiBN = computeSecurityHoldWei(amountEth);
-      const totalValueBN = amountWeiBN.add(holdWeiBN);
+      // compute exact wei bigints
+      const amountWei = ethers.parseEther(String(amountEth)); // bigint
+      const holdWei = computeSecurityHoldWei(amountEth); // bigint
+      const totalValue = amountWei + holdWei; // bigint
 
-      const previewMsg = `You are about to create a gig that locks ${ethers.utils.formatEther(
-        amountWeiBN
-      )} ETH plus a security hold of ${ethers.utils.formatEther(holdWeiBN)} ETH (total ${ethers.utils.formatEther(
-        totalValueBN
+      // show preview and require user confirm before wallet
+      const previewMsg = `You are about to create a gig that locks ${ethers.formatEther(
+        amountWei
+      )} ETH plus a security hold of ${ethers.formatEther(holdWei)} ETH (total ${ethers.formatEther(
+        totalValue
       )} ETH).`;
-
       const ok = window.confirm(previewMsg + '\n\nProceed to wallet to confirm?');
       if (!ok) {
         setLoading(false);
         return;
       }
 
+      // force wallet popup / account selection
       await requestAccounts();
 
       setTxStatus('pending');
+
+      // call util createGigOnchain which calls contract.createGig(ipfsCID, amountWei, deadlineDays) payable
       const txResp = await createGigOnchain({
         ipfsCID: pinRes.hash,
-        amountWei: amountWeiBN.toString(),
+        amountWei: amountWei.toString(),         // string of bigint
         deadlineDays: Number(deadlineDays),
-        valueWei: totalValueBN.toString(),
+        valueWei: totalValue.toString(),         // msg.value override as string
       });
 
       setTxHash(txResp.hash);
       setTxStatus('pending');
 
+      // wait for first confirmation
       const receipt = await txResp.wait(1);
       if (receipt && receipt.status === 1) {
         setTxStatus('confirmed');
-        // optional: navigate to /my-gigs after success
+        // optionally navigate to gigs page:
         // navigate('/my-gigs');
       } else {
         setTxStatus('failed');
@@ -127,7 +139,10 @@ export default function CreateGig() {
       }
     } catch (e) {
       console.error(e);
-      setError(e.message || String(e));
+      // Format common metamask/provider errors
+      if (e?.data?.message) setError(e.data.message);
+      else if (e?.error?.message) setError(e.error.message);
+      else setError(e?.message || String(e));
       setTxStatus('failed');
     } finally {
       setLoading(false);
@@ -136,19 +151,22 @@ export default function CreateGig() {
 
   const explorerBase = import.meta.env.VITE_EXPLORER_TX_URL || '';
 
-  /* small helpers for UI */
+  /* UI helpers using ethers */
   const securityHold = () => {
     try {
-      const amt = Number(amountEth || 0);
-      return (amt * SECURITY_HOLD_PERCENT).toFixed(6).replace(/\.?0+$/,'') + ' ETH';
+      if (!amountEth || Number(amountEth) === 0) return '0 ETH';
+      const hold = computeSecurityHoldWei(amountEth);
+      return `${ethers.formatEther(hold)} ETH`;
     } catch {
       return '0 ETH';
     }
   };
   const totalRequired = () => {
     try {
-      const amt = Number(amountEth || 0);
-      return (amt + amt * SECURITY_HOLD_PERCENT).toFixed(6).replace(/\.?0+$/,'') + ' ETH';
+      if (!amountEth || Number(amountEth) === 0) return '0 ETH';
+      const amountWei = ethers.parseEther(String(amountEth));
+      const hold = computeSecurityHoldWei(amountEth);
+      return `${ethers.formatEther(amountWei + hold)} ETH`;
     } catch {
       return '0 ETH';
     }
@@ -158,7 +176,6 @@ export default function CreateGig() {
     <div className="min-h-screen bg-gradient-to-b from-[#06060a] to-[#04050a] text-gray-200 py-12">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left: Main form card */}
           <div className="lg:col-span-2">
             <div className="rounded-2xl bg-gradient-to-b from-[#07121a]/60 to-[#07121a]/30 border border-white/6 p-8 shadow-[0_8px_40px_rgba(2,6,23,0.7)]">
               <div className="flex items-center justify-between">
@@ -229,9 +246,10 @@ export default function CreateGig() {
                   <input
                     value={inviteAddress}
                     onChange={(e) => setInviteAddress(e.target.value)}
-                    placeholder="0x..."
+                    placeholder="0x... (stored in metadata only)"
                     className="mt-2 w-full p-3 rounded-lg bg-[#06101a] border border-white/6 placeholder-gray-500 text-white focus:ring-0"
                   />
+                  <div className="text-xs text-gray-500 mt-2">Invite address is saved in IPFS metadata only.</div>
                 </div>
 
                 <div>
@@ -318,7 +336,6 @@ export default function CreateGig() {
             </div>
           </div>
 
-          {/* Right: Summary sidebar */}
           <aside className="space-y-6">
             <div className="rounded-2xl bg-gradient-to-b from-[#07121a]/55 to-[#07121a]/25 border border-white/6 p-6">
               <h3 className="text-lg font-semibold text-white">Gig summary</h3>
@@ -368,6 +385,7 @@ export default function CreateGig() {
     </div>
   );
 }
+
 
 
 // import React, { useState } from 'react';
