@@ -18,13 +18,13 @@ async function apiRequest(endpoint, options = {}) {
 }
 
 export async function uploadToIPFS(metadata) {
-  const response = await apiRequest('/ipfs/upload', {
+  const response = await apiRequest('/ipfs', {
     method: 'POST',
     body: JSON.stringify({ metadata }),
   });
   return {
-    cid: response.cid || response.IpfsHash,
-    url: `${IPFS_GATEWAY}${response.cid || response.IpfsHash}`,
+    cid: response.hash || response.cid || response.IpfsHash,
+    url: `${IPFS_GATEWAY}${response.hash || response.cid || response.IpfsHash}`,
   };
 }
 
@@ -50,6 +50,7 @@ export function createJobMetadata({ title, description, skills = [], budget, dea
     version: '1.0',
     type: 'devlance-job',
     title,
+    shortDesc: description,
     description,
     skills: Array.isArray(skills) ? skills : [],
     budget: { amount: budget, currency: 'ETH' },
@@ -64,6 +65,8 @@ export function createSubmissionMetadata({ jobId, description, links = [], devel
     version: '1.0',
     type: 'devlance-submission',
     jobId,
+    title: `Submission for Job #${jobId}`,
+    shortDesc: description.substring(0, 200),
     description,
     links: Array.isArray(links) ? links : [],
     developer: developerAddress,
