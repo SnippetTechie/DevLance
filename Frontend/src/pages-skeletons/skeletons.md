@@ -6,6 +6,7 @@ frontend/
 │  ├─ components/
 │  │  ├─ DashboardHeader.jsx
 │  │  └─ RoleButton.jsx
+|  |    
 │  │
 │  ├─ contexts/
 │  │  └─ WalletContext.js
