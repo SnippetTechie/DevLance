@@ -1,4 +1,5 @@
-// src/pages/Landing.jsx
+
+// // src/pages/Landing.jsx
 import React, { useEffect } from 'react';
 import FloatingLines from '../components/FloatingLines';
 import { useNavigate } from 'react-router-dom';
