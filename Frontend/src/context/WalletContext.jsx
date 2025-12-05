@@ -132,27 +132,6 @@ export function WalletProvider({ children }) {
       window.ethereum.removeListener?.('disconnect', handleDisconnect);
     };
   }, [account, provider, disconnect, isMetaMaskInstalled, updateBalance]);
-
-  useEffect(() => {
-    if (!isMetaMaskInstalled()) return;
-    (async () => {
-      try {
-        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-        if (accounts?.length) {
-          const browserProvider = new ethers.BrowserProvider(window.ethereum);
-          const currentSigner = await browserProvider.getSigner();
-          const address = await currentSigner.getAddress();
-          const network = await browserProvider.getNetwork();
-          setProvider(browserProvider);
-          setSigner(currentSigner);
-          setAccount(address);
-          setChainId('0x' + network.chainId.toString(16));
-          await updateBalance(address, browserProvider);
-        }
-      } catch (e) { console.error('Auto-connect failed:', e); }
-    })();
-  }, [isMetaMaskInstalled, updateBalance]);
-
   const formattedBalance = balance ? parseFloat(ethers.formatEther(balance)).toFixed(4) : '0.0000';
   const shortAddress = account ? `${account.slice(0, 6)}...${account.slice(-4)}` : null;
 
