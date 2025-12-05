@@ -112,7 +112,7 @@ export default function FreelancerDashboard() {
       
       <Header />
 
-      <main className="relative z-10 pt-20 pb-16 px-4 sm:px-6 lg:px-8">
+      <main className="relative z-10 pt-26 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Page Header */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">

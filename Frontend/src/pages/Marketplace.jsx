@@ -34,7 +34,7 @@ export default function Marketplace() {
       
       <Header />
 
-      <main className="relative z-10 pt-20 pb-16 px-4 sm:px-6 lg:px-8">
+      <main className="relative z-10 pt-26 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Page Header */}
           <div className="text-center mb-12">
