@@ -1,36 +1,24 @@
-import { useEffect, useState } from "react";
+// src/hooks/useConfig.js
+import { useMemo } from 'react';
 
-export default function useConfig(){
-    const [config,setConfig]=useState(null);
-    const [loading,setLoading]=useState(true);
+/**
+ * useConfig - read configuration directly from import.meta.env
+ * No network call, no mocks. Always deterministic from environment.
+ */
+export default function useConfig() {
+  const config = useMemo(() => {
+    return {
+      chainId: import.meta.env.VITE_CHAIN_ID || null,
+      networkName: import.meta.env.VITE_NETWORK_NAME || null,
+      demoMode: import.meta.env.VITE_DEMO_MODE === 'true' ? true : false,
+      apiBaseUrl: import.meta.env.VITE_API_BASE_URL || null,
+      escrowContractAddress: import.meta.env.VITE_ESCROW_CONTRACT_ADDRESS || null,
+      ipfsGateway: import.meta.env.VITE_IPFS_GATEWAY || null,
+      explorerTxUrl: import.meta.env.VITE_EXPLORER_TX_URL || null,
+      configSource: 'env',
+    };
+  }, []);
 
-    useEffect(()=>{
-        let mounted=true;
-        async function fetchConfig(){
-            try{
-                const res=await fetch('/api/config');
-                if(!res.ok) throw new Error('no backend config');
-                const json=await res.json();
-                if(mounted){
-                    setConfig({...json,configSource:'api'});
-                }
-            }catch(e){
-                const envCfg={
-                    chainId:import.meta.env.VITE_CHAIN_ID|| '0X539',
-                    networkName:import.meta.env.VITE_NETWORK_NAME||'LocalGanache',
-                    demoMode:(import.meta.env.VITE_DEMO_MODE==='true')|| true,
-                    faucetUrl:import.meta.env.VITE_FAUCET_URL||'',
-                    escrowContractAddress:import.meta.env.VITE_ESCROW_ADDR||'',
-                    totalGigs:0,
-                    configSource:'envFallback',
-                }
-                if (mounted) setConfig(envCfg);
-            }finally{
-                if (mounted) setLoading(false);
-            }
-        }
-        fetchConfig();
-        return()=>(mounted=false);
-    },[]);
-    return {config,loading};
+  // synchronous, no loading state needed (pure env)
+  return { config, loading: false };
 }
